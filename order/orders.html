@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Orders for {{ student_id }}</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <style>
+  @import url(http://fonts.googleapis.com/css?family=Merriweather);
+  @import url(http://fonts.googleapis.com/css?family=Proza+Libre);
+
+  h1 {
+    font-family: "Proza Libre";
+    font-size: 48px;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    padding-top: 42px;
+  }
+
+  h4 {
+    font-family: "Proza Libre";
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    padding-top: 60px;
+  }
+
+  .merriweather-header {
+    font-family: "Proza Libre";
+    font-size: 18px;
+    font-weight: bold;
+    color: #241c15;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .proza-libre-content-header {
+    font-family: "Proza Libre";
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    color: #241c15;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .proza-libre-content {
+    font-family: "Proza Libre";
+    font-size: 12px;
+    color: #241c15;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .proza-libre-button {
+    font-family: "Proza Libre";
+    letter-spacing: 0.4em;
+  }
+
+  .card-body {
+  }
+
+  .card-body p {
+    margin: 0;
+    padding: 0;
+  }
+
+  #cart-total p {
+    margin: 4px;
+  }
+
+  hr {
+    margin: 0;
+    padding: 0;
+  }
+
+  .item:hover {
+    background: rgb(232, 244, 248);
+  }
+
+  .proza-libre-password-validation {
+    font-family: "Proza Libre";
+    font-size: 12px;
+    color: #241c15;
+  }
+
+  .proza-libre-content-footer {
+    font-family: "Proza Libre";
+    font-size: 11px;
+    color: rgba(36,28,21,0.65);
+  }
+
+  .shadow-right {
+    box-shadow: 8px 0 10px -6px black;
+  }
+  </style>
+
+<script>
+var counter = 0;
+
+function addItemToDOM(data, divID) {
+  var itemHTML = `
+    <div class="card-body item" id="cart-item">
+      <div class="row">
+        <div class="col-8">
+          <p class="proza-libre-content-header" id="item-name">${data.prodName}</p>
+          <p class="proza-libre-content" id="itme-description">${data.prodDesc}</p>
+        </div>
+        <div class="col-4">
+          <p class="text-right proza-libre-content" id="item-price">$ ${data.prodPrice}</p>
+          <p class="text-right proza-libre-content">( <span id="item-quantity-">${data.prodQty}</span> )</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  $("#cart-items" + divID).append(itemHTML);
+}
+
+function updateTotalAmount(divID, cart) {
+  const HST = 0.13;
+  let subTotal = getTotalAmount(cart);
+  let taxTotal = subTotal * HST;
+
+  if (subTotal > 0) {
+    $("#cart-total-subtotal" + divID).html(subTotal.toFixed(2));
+    $("#cart-total-hst" + divID).html(taxTotal.toFixed(2));
+    $("#cart-total-amount" + divID).html((subTotal + taxTotal).toFixed(2));
+  }
+}
+
+function getTotalAmount(cart) {
+  if (cart.length > 0) {
+    var total = 0;
+    for (var i in cart) {
+      total += (parseFloat(cart[i].prodQty) * parseFloat(cart[i].prodPrice));
+    }
+
+    return total;
+  }
+}
+</script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Orders for {{ student_id }}</h1>
+    {% for r in orders %}
+    <h4>{{ r.date_created }}</h4>
+
+<script>
+  counter++;
+  var cart = JSON.parse('{{ r.order_json }}'.replace(/&#34;/g,'"'));
+
+  var cartHTML = `
+    <div class="border-top" id="cart-items${counter}">
+    </div>
+
+    <div id="cart-total" class="border-bottom item">
+      <div class="card-body">
+        <p class="text-right proza-libre-content proza-libre-content-footer">Sub Total&nbsp;&nbsp;&nbsp;$<span id="cart-total-subtotal${counter}"></span></p>
+        <p class="text-right proza-libre-content proza-libre-content-footer">HST&nbsp;&nbsp;&nbsp;$<span id="cart-total-hst${counter}"></span></p>
+        <p class="text-right proza-libre-content proza-libre-content-header">Total&nbsp;&nbsp;&nbsp;$<span id="cart-total-amount${counter}"></span></p>
+      </div>
+    </div>
+  `;
+
+  document.write(cartHTML);
+
+  for (var i in cart) {
+    addItemToDOM(cart[i], counter);
+  }
+
+  updateTotalAmount(counter, cart);
+</script>
+
+    {% endfor %}
+  </div>
+</body>
+
+</html>

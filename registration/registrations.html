@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Registration for {{ student_id }}</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+
+  <style>
+  @import url(http://fonts.googleapis.com/css?family=Merriweather);
+  @import url(http://fonts.googleapis.com/css?family=Proza+Libre);
+
+  body {
+    font-family: "Proza Libre";
+  }
+
+  h1 {
+    font-family: "Proza Libre";
+    font-size: 48px;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    padding-top: 42px;
+  }
+
+  h4 {
+    font-family: "Proza Libre";
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    padding-top: 60px;
+  }
+
+  .merriweather-header {
+    font-family: "Proza Libre";
+    font-size: 18px;
+    font-weight: bold;
+    color: #241c15;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .proza-libre-content-header {
+    font-family: "Proza Libre";
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    color: #241c15;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .proza-libre-content {
+    font-family: "Proza Libre";
+    font-size: 12px;
+    color: #241c15;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .proza-libre-button {
+    font-family: "Proza Libre";
+    letter-spacing: 0.4em;
+  }
+
+  .card-body {
+  }
+
+  .card-body p {
+    margin: 0;
+    padding: 0;
+  }
+
+  #cart-total p {
+    margin: 4px;
+  }
+
+  hr {
+    margin: 0;
+    padding: 0;
+  }
+
+  .item:hover {
+    background: rgb(232, 244, 248);
+  }
+
+  .proza-libre-password-validation {
+    font-family: "Proza Libre";
+    font-size: 12px;
+    color: #241c15;
+  }
+
+  .proza-libre-content-footer {
+    font-family: "Proza Libre";
+    font-size: 11px;
+    color: rgba(36,28,21,0.65);
+  }
+
+  .shadow-right {
+    box-shadow: 8px 0 10px -6px black;
+  }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <h1>Registrations for {{ student_id }}</h1>
+    {% for r in registrations %}
+    <h4>{{ r.date_created }}</h4>
+    <table class="table table-borderless table-hover table-responsive-lg border-bottom border-top">
+      <tbody>
+        <tr>
+          <th scope="row"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></th>
+          <td>{{ r.email }}</td>
+        </tr>
+        <tr>
+          <th scope="row"><i class="fa fa-user fa-lg" aria-hidden="true"></i></th>
+          <td>{{ r.username }}</td>
+        </tr>
+        <tr>
+          <th scope="row"><i class="fa fa-key fa-lg" aria-hidden="true"></i></th>
+          <td>{{ r.password }}
+            <br><br>
+            <p>Cleart text:
+<script>
+  document.write(window.atob('{{ r.password }}'));
+</script>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+      {% endfor %}
+      <hr>
+    </table>
+  </div>
+</body>
+
+</html>

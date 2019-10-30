@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+
+  <title>CP202 - Grades</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>WLU - CP202 - Assignment Grades</h1>
+    <p>Enter your student ID and select the assignment for which you want to check your grade.</p>
+    <form method="post" action="/marks">
+      <div class="form-group">
+        <input type="text" class="form-control" id="student_id" name="student_id" aria-describedby="student_id_help" placeholder="Enter student ID">
+        <select name="assignment" class="form-control" id="assignment">
+          <option value="1">Assignment 1</option>
+          <option value="2">Assignment 2</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">GET GRADE</button>
+    </form>
+  <br><br>
+    <p>If you get the message 'No student id found', chances are you didn't submit the required assignment form or you haven't submitted an assignment.</p>
+    <p>If you are late submitting assignments, email jsandoval@wlu.ca. You should still submit your assignments, even if late: you will get partial grades.</p>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+
+  <title>CP202 - Grades</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+      <h1>WLU - CP202 - Assignment {{ assignment }} Grade</h1>
+{% if student_id > 0 %}
+    <div class="alert alert-primary" role="alert">
+      <h2>{{ student_id }} - {{ mark }}%</h2>
+    </div>
+
+    <h2>Grade Breakdown</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Q1</th>
+          <th scope="col">Q2</th>
+          <th scope="col">Q3</th>
+{% if q4 %}
+          <th scope="col">Q4</th>
+{% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ q1 }}%</td>
+          <td>{{ q2 }}%</td>
+          <td>{{ q3 }}%</td>
+{% if q4 %}
+          <td>{{ q4 }}%</td>
+{% endif %}
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-primary" role="alert">
+      <h2>Comments</h2>
+      <div style="white-space: pre-wrap;"> {{ comments }} </div>
+    </div>
+{% else %}
+<div class="alert alert-danger" role="alert">
+  No student id found.
+</div>
+{% endif %}
+  </div>
+</body>
+
+</html>
