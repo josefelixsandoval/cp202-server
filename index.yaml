@@ -27,3 +27,9 @@ indexes:
   - name: student_id
   - name: date_created
     direction: desc
+
+- kind: RegistrationWithImage
+  properties:
+  - name: student_id
+  - name: date_created
+    direction: desc

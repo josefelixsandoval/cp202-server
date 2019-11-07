@@ -57,7 +57,7 @@ class RegistrationWithImage(ndb.Model):
     email = ndb.StringProperty()
     country = ndb.StringProperty()
     description = ndb.StringProperty()
-    image = ndb.BlobKeyProperty()
+    image = ndb.BlobProperty()
     date_created = ndb.DateTimeProperty(auto_now_add=True)
 
 def get_marks_from_google_sheet(student_id, assignment):
@@ -117,6 +117,12 @@ def get_student(student_id):
 # Decreasing order by date
 def get_registrations(student_id):
     return Registration.query(Registration.student_id == student_id).order(-Registration.date_created).fetch()
+
+def get_registrations_with_image(student_id):
+    return RegistrationWithImage.query(RegistrationWithImage.student_id == student_id).order(-Registration.date_created).fetch()
+
+def get_registration_with_image(registration_id):
+    return RegistrationWithImage.get_by_id(int(registration_id))
 
 def get_demo_records(student_id):
     return DemoRecord.query(DemoRecord.student_id == student_id).order(-DemoRecord.date_created).fetch()
@@ -212,29 +218,34 @@ class RegisterWithImageHandler(webapp2.RequestHandler):
     def post(self):
         student_id = self.request.get("student_id")
         email = self.request.get("email")
-        username = self.request.get("username")
-        password = self.request.get("password")
+        country = self.request.get("country")
+        description = self.request.get("description")
+        avatarImage = self.request.get("avatarImage")
 
         if ((student_id is None or not student_id)
                 or (email is None or not email)
-                or (username is None or not username)
-                or (password is None or not password)):
+                or (country is None or not country)
+                or (description is None or not description)):
             self.response.set_status(500)
             self.response.out.write('All fields are required.')
         else:
             if (get_student(student_id) is not None):
-                encoded_password = base64.b64encode(password)
+                raw_file = self.request.get('avatarImage')
 
-                r = Registration(student_id = student_id, email = email, username = username, password = encoded_password)
+                r = RegistrationWithImage(student_id = student_id,
+                    email = email,
+                    country = country,
+                    description = description,
+                    image = raw_file)
                 k = r.put()
 
-                logging.info(k)
+                    # image = str(raw_file))
 
                 reg = {
                     'student_id': student_id,
                     'email': email,
-                    'username': username,
-                    'password': encoded_password
+                    'country': country,
+                    'description': description
                 }
 
                 json_object = json.dumps(reg);
@@ -256,6 +267,22 @@ class RegistrationListHandler(webapp2.RequestHandler):
             }
 
             template = JINJA_ENVIRONMENT.get_template('registration/registrations.html')
+            self.response.write(template.render(template_values))
+        else:
+            self.response.set_status(500)
+            self.response.out.write('Student ID not found - ' + student_id)
+
+class RegistrationWithImageListHandler(webapp2.RequestHandler):
+    def get(self, student_id):
+        if (get_student(student_id) is not None):
+            registrations = get_registrations_with_image(student_id)
+
+            template_values = {
+                'student_id': student_id,
+                'registrations': registrations
+            }
+
+            template = JINJA_ENVIRONMENT.get_template('registration/registrations-with-image.html')
             self.response.write(template.render(template_values))
         else:
             self.response.set_status(500)
@@ -382,6 +409,13 @@ class FormDemoAddHandler(webapp2.RequestHandler):
             self.response.set_status(500)
             self.response.out.write('Student ID not found - ' + student_id)
 
+class ImageHandler(webapp2.RequestHandler):
+    def get(self, registration_id):
+        r = get_registration_with_image(registration_id)
+
+        #self.response.headers['Content-Type'] = 'image/png'
+        self.response.out.write(r.image)
+
 app = webapp2.WSGIApplication([
     ('/import', ImportHandler),
     ('/marks', MarksHandler),
@@ -394,7 +428,8 @@ app = webapp2.WSGIApplication([
     ('/form_demo', FormDemoHandler),
     ('/demo', FormDemoAddHandler),
     ('/demos/(\d+)', FormDemoAddHandler),
-    #('/register_with_image', RegisterWithImageHandler),
-    #('/registrations_with_image/(\d+)', RegistrationWithImageListHandler),
+    ('/register_with_image', RegisterWithImageHandler),
+    ('/registrations_with_image/(\d+)', RegistrationWithImageListHandler),
+    ('/image/(\d+)', ImageHandler),
     # ('/uploads/(\d+)/(\d+)', ImageListHandler), # student_id, registration_id GET registration
 ], debug=True)
