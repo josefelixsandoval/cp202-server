@@ -137,13 +137,13 @@ class OrderHandler(webapp2.RequestHandler):
 
         if ((student_id is None or not student_id)or (order_json is None or not order_json)):
             self.response.set_status(500)
-            self.response.out.write('All fields are required.')
+            self.response.out.write('<h1 style="color:red;">ERROR: All fields are required.</h1><p><h2>Your order was not processed.</h2>')
         else:
             student = get_student(student_id)
 
             if (student is None):
                 self.response.set_status(500)
-                self.response.out.write('Student ID not found - ' + student_id)
+                self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '</h1>')
             else:
                 logging.info(student_id)
                 logging.info(order_json)
@@ -153,7 +153,8 @@ class OrderHandler(webapp2.RequestHandler):
 
                 logging.info(k)
 
-                self.response.headers['Content-Type'] = 'application/json'
+                # self.response.headers['Content-Type'] = 'application/json'
+                self.response.out.write('<h1 style="color:green">YAY! Your order was processed successfully</h1><h2>These are the items you sent:</h2>')
                 self.response.out.write(order_json)
 
 class OrderListHandler(webapp2.RequestHandler):
@@ -173,7 +174,7 @@ class OrderListHandler(webapp2.RequestHandler):
             self.response.write(template.render(template_values))
         else:
             self.response.set_status(500)
-            self.response.out.write('Student ID not found - ' + student_id)
+            self.response.out.write('<h1 style="color:red">ERROR: Student ID not found - ' + student_id + '</h1>')
 
 class RegisterHandler(webapp2.RequestHandler):
     def post(self):
@@ -187,7 +188,7 @@ class RegisterHandler(webapp2.RequestHandler):
                 or (username is None or not username)
                 or (password is None or not password)):
             self.response.set_status(500)
-            self.response.out.write('All fields are required.')
+            self.response.out.write('<h1 style="color:red">ERROR: All fields are required.</h1>')
         else:
             if (get_student(student_id) is not None):
                 encoded_password = base64.b64encode(password)
@@ -208,11 +209,12 @@ class RegisterHandler(webapp2.RequestHandler):
 
                 logging.info(json_object)
 
-                self.response.headers['Content-Type'] = 'application/json'
+                # self.response.headers['Content-Type'] = 'application/json'
+                self.response.out.write('<h1 style="color:green">YAY! Your registration was processed successfully</h1><h2>These are the values that were processed:</h2>')
                 self.response.out.write(json_object)
             else:
                 self.response.set_status(500)
-                self.response.out.write('Student ID not found - ' + student_id)
+                self.response.out.write('<h1 style="color:red">ERROR: Student ID not found - ' + student_id + '</h1>')
 
 class RegisterWithImageHandler(webapp2.RequestHandler):
     def post(self):
@@ -227,7 +229,7 @@ class RegisterWithImageHandler(webapp2.RequestHandler):
                 or (country is None or not country)
                 or (description is None or not description)):
             self.response.set_status(500)
-            self.response.out.write('All fields are required.')
+            self.response.out.write('<h1 style="color:red">ERROR: All fields are required.</h1>')
         else:
             if (get_student(student_id) is not None):
                 raw_file = self.request.get('avatarImage')
@@ -250,11 +252,12 @@ class RegisterWithImageHandler(webapp2.RequestHandler):
 
                 json_object = json.dumps(reg);
 
-                self.response.headers['Content-Type'] = 'application/json'
+                # self.response.headers['Content-Type'] = 'application/json'
+                self.response.out.write('<h1 style="color:green">YAY! Your registration was processed successfully</h1><h2>These are the values that were processed:</h2>')
                 self.response.out.write(json_object)
             else:
                 self.response.set_status(500)
-                self.response.out.write('Student ID not found - ' + student_id)
+                self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '<h1>')
 
 class RegistrationListHandler(webapp2.RequestHandler):
     def get(self, student_id):
@@ -270,7 +273,7 @@ class RegistrationListHandler(webapp2.RequestHandler):
             self.response.write(template.render(template_values))
         else:
             self.response.set_status(500)
-            self.response.out.write('Student ID not found - ' + student_id)
+            self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '</h1>')
 
 class RegistrationWithImageListHandler(webapp2.RequestHandler):
     def get(self, student_id):
@@ -286,7 +289,7 @@ class RegistrationWithImageListHandler(webapp2.RequestHandler):
             self.response.write(template.render(template_values))
         else:
             self.response.set_status(500)
-            self.response.out.write('Student ID not found - ' + student_id)
+            self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '</h1>')
 
 class MarksHandler(webapp2.RequestHandler):
     def get(self):
@@ -340,7 +343,7 @@ class ValidationKeyListHandler(webapp2.RequestHandler):
             self.response.out.write(json_object)
         else:
             self.response.set_status(500)
-            self.response.out.write('Student ID not found - ' + student_id)
+            self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '</h1>')
 
 class FormDemoHandler(webapp2.RequestHandler):
     def get(self):
@@ -381,7 +384,7 @@ class FormDemoAddHandler(webapp2.RequestHandler):
             self.response.write(template.render(template_values))
         else:
             self.response.set_status(500)
-            self.response.out.write('Student ID not found - ' + student_id)
+            self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '</h1>')
 
     def post(self):
         student_id = self.request.get('student_id')
@@ -403,11 +406,12 @@ class FormDemoAddHandler(webapp2.RequestHandler):
 
             logging.info(json_object)
 
-            self.response.headers['Content-Type'] = 'application/json'
+            # self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write('<h1 style="color:green">YAY! The form submission worked.</h1><h2>These are the values that were processed:</h2>')
             self.response.out.write(json_object)
         else:
             self.response.set_status(500)
-            self.response.out.write('Student ID not found - ' + student_id)
+            self.response.out.write('<h1 style="color:red">Student ID not found - ' + student_id + '</h1>')
 
 class ImageHandler(webapp2.RequestHandler):
     def get(self, registration_id):
