@@ -19,6 +19,7 @@ from google.appengine.api import users, app_identity
 ASSIGNMENTS = {
     'a1' : {'SPREADSHEET_ID': '1ddelHaR10-7iKHH_ceaROjMFSJzhEOrOXSgGoS327-g', 'RANGE_NAME': 'Sheet1!A2:F'},
     'a2' : {'SPREADSHEET_ID': '1O0hjndFsfZbj-S3HisCAlNpImcv_JEZXkqSEICgWoJo', 'RANGE_NAME': 'Sheet1!A2:G'},
+    'a3' : {'SPREADSHEET_ID': '1Ohjrg_1o13zlUoASvu5t8zJ9Kf7cfDj0h0XsmVZwOH0', 'RANGE_NAME': 'Sheet1!A2:H'},
 }
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
@@ -154,7 +155,7 @@ class OrderHandler(webapp2.RequestHandler):
                 logging.info(k)
 
                 # self.response.headers['Content-Type'] = 'application/json'
-                self.response.out.write('<h1 style="color:green">YAY! Your order was processed successfully</h1><h2>These are the items you sent:</h2>')
+                self.response.out.write('<h1 style="color:green">Your order was processed successfully</h1><h2>These are the items you sent:</h2>')
                 self.response.out.write(order_json)
 
 class OrderListHandler(webapp2.RequestHandler):
@@ -210,7 +211,7 @@ class RegisterHandler(webapp2.RequestHandler):
                 logging.info(json_object)
 
                 # self.response.headers['Content-Type'] = 'application/json'
-                self.response.out.write('<h1 style="color:green">YAY! Your registration was processed successfully</h1><h2>These are the values that were processed:</h2>')
+                self.response.out.write('<h1 style="color:green">Your registration was processed successfully</h1><h2>These are the values that were processed:</h2>')
                 self.response.out.write(json_object)
             else:
                 self.response.set_status(500)
@@ -253,7 +254,7 @@ class RegisterWithImageHandler(webapp2.RequestHandler):
                 json_object = json.dumps(reg);
 
                 # self.response.headers['Content-Type'] = 'application/json'
-                self.response.out.write('<h1 style="color:green">YAY! Your registration was processed successfully</h1><h2>These are the values that were processed:</h2>')
+                self.response.out.write('<h1 style="color:green">Your registration was processed successfully</h1><h2>These are the values that were processed:</h2>')
                 self.response.out.write(json_object)
             else:
                 self.response.set_status(500)
@@ -319,8 +320,12 @@ class MarksHandler(webapp2.RequestHandler):
                 'q3': info_row[5],
             }
 
-            if len(info_row) == 7:
+            if len(info_row) >= 7:
                 template_values['q4'] = info_row[6];
+
+            if len(info_row) == 8:
+                template_values['q5'] = info_row[7];
+
 
         template = JINJA_ENVIRONMENT.get_template('marks.html')
         self.response.write(template.render(template_values))
@@ -407,7 +412,7 @@ class FormDemoAddHandler(webapp2.RequestHandler):
             logging.info(json_object)
 
             # self.response.headers['Content-Type'] = 'application/json'
-            self.response.out.write('<h1 style="color:green">YAY! The form submission worked.</h1><h2>These are the values that were processed:</h2>')
+            self.response.out.write('<h1 style="color:green">The form submission worked.</h1><h2>These are the values that were processed:</h2>')
             self.response.out.write(json_object)
         else:
             self.response.set_status(500)

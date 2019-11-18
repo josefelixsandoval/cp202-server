@@ -30,6 +30,10 @@
 {% if q4 %}
           <th scope="col">Q4</th>
 {% endif %}
+
+{% if q5 %}
+          <th scope="col">Bonus</th>
+{% endif %}
         </tr>
       </thead>
       <tbody>
@@ -39,6 +43,10 @@
           <td>{{ q3 }}%</td>
 {% if q4 %}
           <td>{{ q4 }}%</td>
+{% endif %}
+
+{% if q5 %}
+          <td>{{ q5 }}%</td>
 {% endif %}
         </tr>
       </tbody>
